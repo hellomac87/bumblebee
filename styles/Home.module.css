@@ -1,21 +1,19 @@
 .container {
-    padding: 0 2rem;
+    @apply bg-[#0d1117];
 }
 
 .main {
-    min-height: 100vh;
-    padding: 4rem 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    @apply h-screen flex items-center flex-col justify-center;
 }
 
 .title {
-    @apply text-red-500;
+    @apply text-xl text-white mb-2;
+}
 
-    & > strong {
-        @apply font-bold text-blue-500;
-    }
+.list {
+    @apply text-white;
+}
+
+.giphy {
+    @apply text-blue-500;
 }
