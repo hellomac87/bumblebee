@@ -1,6 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
+import { routes } from '../constants/routes';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
@@ -16,6 +18,8 @@ const Home: NextPage = () => {
                 <h1 className={styles.title}>
                     dobby is <strong>free!</strong>
                 </h1>
+
+                <Link href={routes.giphy}>giphy</Link>
             </main>
         </div>
     );
