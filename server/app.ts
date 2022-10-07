@@ -1,15 +1,20 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors, { CorsOptions } from "cors";
-
-type Post = {
-  id: number;
-  title: string;
-  imageUrl: string;
-  body: string;
-};
+import multer from "multer";
 
 const app = express();
-const port = 8080;
+const port = 3003;
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 //cors option
 const corsOptions: CorsOptions = {
@@ -18,10 +23,24 @@ const corsOptions: CorsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+app.use("/static", express.static(__dirname + "/public"));
+console.log(__dirname + "/public");
 app.get("/", (req: Request, res: Response) => {
   res.send("hello express!!");
 });
+
+app.post(
+  "/api/posts",
+  upload.single("image"),
+  (req: Request, res: Response) => {
+    // 업로드한 주소와 body data db 에 저장
+    // 정보 리스폰스
+    console.log(req.file);
+    res.json({
+      imageUrl: `http://localhost:3003/static/uploads/${req.file?.filename}`,
+    });
+  }
+);
 
 app.get("/api/posts", (req: Request, res: Response) => {
   res.json({
