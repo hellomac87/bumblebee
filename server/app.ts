@@ -1,20 +1,36 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors, { CorsOptions } from "cors";
 import multer from "multer";
+import multerS3 from "multer-s3";
+import AWS from "aws-sdk";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = 3003;
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
+AWS.config.update({
+  accessKeyId: "AKIA2WMMVHC627EO2RBY",
+  secretAccessKey: "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",
+  region: "ap-northeast-2",
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3() as any,
+    bucket: "five-seconds-bucket",
+    // acl: "public-read",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+
+    key: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
 
 //cors option
 const corsOptions: CorsOptions = {
@@ -24,7 +40,7 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 app.use("/static", express.static(__dirname + "/public"));
-console.log(__dirname + "/public");
+
 app.get("/", (req: Request, res: Response) => {
   res.send("hello express!!");
 });
