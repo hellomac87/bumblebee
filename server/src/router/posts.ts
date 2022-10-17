@@ -1,16 +1,13 @@
-import express, { Request, Response, NextFunction } from 'express';
-import cors, { CorsOptions } from 'cors';
+import express, { Request, Response } from 'express';
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 import AWS from 'aws-sdk';
-import dotenv from 'dotenv';
 
-dotenv.config();
-
-const app = express();
-const port = 3003;
+const router = express.Router();
 
 AWS.config.update({
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
     region: 'ap-northeast-2',
 });
 
@@ -30,29 +27,18 @@ const upload = multer({
     }),
 });
 
-//cors option
-const corsOptions: CorsOptions = {
-    origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
-app.use('/static', express.static(__dirname + '/public'));
-
-app.get('/', (req: Request, res: Response) => {
-    res.send('hello express!!');
+router.use(function (req, res, next) {
+    console.log('posts router');
+    next();
 });
 
-app.post('/api/posts', upload.single('image'), (req: Request, res: Response) => {
+router.post('/', upload.single('image'), (req: Request, res: Response) => {
     // 업로드한 주소와 body data db 에 저장
     // 정보 리스폰스
-    console.log(req.file);
-    res.json({
-        imageUrl: `http://localhost:3003/static/uploads/${req.file?.filename}`,
-    });
+    console.log({ file: req.file });
 });
 
-app.get('/api/posts', (req: Request, res: Response) => {
+router.get('/', (req: Request, res: Response) => {
     res.json({
         success: true,
         posts: [
@@ -78,6 +64,4 @@ app.get('/api/posts', (req: Request, res: Response) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`express start on ${port}`);
-});
+export default router;
