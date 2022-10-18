@@ -1,14 +1,13 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { ErrorRequestHandler, Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
+import morgan from "morgan";
+import helmet from "helmet";
+import "express-async-errors";
 
-type Post = {
-  id: number;
-  title: string;
-  imageUrl: string;
-  body: string;
-};
+import postsRouter from "./router/posts";
 
 const app = express();
+
 const port = 8080;
 
 //cors option
@@ -17,11 +16,28 @@ const corsOptions: CorsOptions = {
   optionsSuccessStatus: 200,
 };
 
+app.use(express.json());
+app.use(helmet());
 app.use(cors(corsOptions));
+app.use(morgan("tiny"));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("hello express!!");
+app.use("/posts", postsRouter);
+
+app.use((req, res, next) => {
+  res.sendStatus(404);
 });
+
+app.use(
+  (
+    error: any,
+    req: any,
+    res: { sendStatus: (arg0: number) => void },
+    next: any
+  ) => {
+    console.log(error);
+    res.sendStatus(500);
+  }
+);
 
 app.get("/api/posts", (req: Request, res: Response) => {
   res.json({
