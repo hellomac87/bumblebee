@@ -1,0 +1,15 @@
+.container {
+  @apply snap-start h-screen flex flex-col items-center justify-center;
+}
+
+.actions {
+  @apply w-full space-y-2;
+}
+
+.edit {
+  @apply w-full h-20 bg-gray-400 text-white cursor-pointer;
+}
+
+.delete {
+  @apply w-full h-20 bg-red-400 text-white cursor-pointer;
+}

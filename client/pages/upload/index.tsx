@@ -1,4 +1,4 @@
-import Wrapper from "../../components/layout/Wrapper";
+import Wrapper from "../../src/components/layout/Wrapper";
 
 function UpLoadPage() {
   return (

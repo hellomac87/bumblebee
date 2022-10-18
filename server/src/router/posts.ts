@@ -60,7 +60,7 @@ router.put("/:id", (req, res, next) => {
   const post = posts.find((post) => post.id === id);
   if (post) {
     post.text = text;
-    res.status(200).json(post);
+    res.status(201).json(post);
   } else {
     res.status(404).json({ message: `Post ${id} not found` });
   }
