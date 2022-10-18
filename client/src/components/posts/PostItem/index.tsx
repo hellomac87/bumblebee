@@ -6,9 +6,10 @@ import styles from "./PostItem.module.css";
 type Props = {
   post: Post;
   onClickEdit: () => void;
+  onClickDelete: () => void;
 };
 
-function PostItem({ post, onClickEdit }: Props) {
+function PostItem({ post, onClickEdit, onClickDelete }: Props) {
   return (
     <li className={styles.container}>
       <img src={post?.url} />
@@ -18,7 +19,9 @@ function PostItem({ post, onClickEdit }: Props) {
         <button className={styles.edit} onClick={onClickEdit}>
           edit
         </button>
-        <button className={styles.delete}>delete</button>
+        <button className={styles.delete} onClick={onClickDelete}>
+          delete
+        </button>
       </div>
     </li>
   );

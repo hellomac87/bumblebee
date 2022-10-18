@@ -3,13 +3,13 @@
 }
 
 .actions {
-  @apply w-full space-y-2;
+  @apply w-full flex items-center space-x-4 px-4;
 }
 
 .edit {
-  @apply w-full h-20 bg-gray-400 text-white cursor-pointer;
+  @apply w-full h-10 bg-gray-600 text-white cursor-pointer rounded-md;
 }
 
 .delete {
-  @apply w-full h-20 bg-red-400 text-white cursor-pointer;
+  @apply w-full h-10 bg-red-600 text-white cursor-pointer rounded-md;
 }

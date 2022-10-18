@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Header from "../../src/components/common/Header";
 import PostItem from "../../src/components/posts/PostItem";
+import PostList from "../../src/components/posts/PostList";
 import { baseUrl } from "../../src/constant/service";
 import PostService from "../../src/service/post";
 import { Post } from "../../types/posts";
@@ -18,23 +19,17 @@ function PostsPage({}: Props) {
     setPosts(data);
   };
 
-  const updatePosts = async (postId: string, text: string) => {
-    const data = await postService.updatePost(postId, text);
-
-    const updatedPosts = posts?.map((post) =>
-      post.id === postId
-        ? {
-            ...post,
-            text,
-          }
-        : post
-    );
-
-    setPosts(updatedPosts ?? null);
-  };
-
   const handleClickEdit = (postId: string) => () => {
     router.push(`/posts/edit/${postId}`);
+  };
+
+  const handleClickDelete = (postId: string) => async () => {
+    const isDelete = window.confirm("deletePost?");
+    if (isDelete) {
+      await postService.deletePost(postId);
+      alert("delete post!");
+      await fetchPosts();
+    }
   };
 
   useEffect(() => {
@@ -44,15 +39,16 @@ function PostsPage({}: Props) {
   return (
     <div>
       <Header />
-      <ul className="h-screen snap-y snap-mandatory z-0 overflow-y-scroll overflow-x-hidden">
+      <PostList>
         {posts?.map((post) => (
           <PostItem
             key={post.id}
             post={post}
             onClickEdit={handleClickEdit(post.id)}
+            onClickDelete={handleClickDelete(post.id)}
           />
         ))}
-      </ul>
+      </PostList>
     </div>
   );
 }
