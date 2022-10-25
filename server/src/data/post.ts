@@ -16,19 +16,19 @@ let posts = [
     },
 ];
 
-export function getAll() {
+export async function getAll() {
     return posts;
 }
 
-export function getAllByUsername(username: string) {
+export async function getAllByUsername(username: string) {
     return posts.filter((post) => post.username === username);
 }
 
-export function getById(postId: string) {
+export async function getById(postId: string) {
     return posts.find((post) => post.id === postId);
 }
 
-export function create(text: string, name: string, username: string) {
+export async function create(text: string, name: string, username: string) {
     const post = {
         id: Date.now().toString(),
         text,
@@ -40,7 +40,7 @@ export function create(text: string, name: string, username: string) {
     return post;
 }
 
-export function update(id: string, text: string) {
+export async function update(id: string, text: string) {
     const post = posts.find((post) => post.id === id);
     if (post) {
         post.text = text;
@@ -48,6 +48,6 @@ export function update(id: string, text: string) {
     return post;
 }
 
-export function remove(id: string) {
+export async function remove(id: string) {
     posts = posts.filter((post) => post.id !== id);
 }
