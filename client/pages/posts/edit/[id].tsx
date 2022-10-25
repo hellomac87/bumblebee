@@ -1,61 +1,63 @@
-import { GetServerSideProps } from "next";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { baseUrl } from "../../../src/constant/service";
-import PostService from "../../../src/service/post";
-import { Post } from "../../../types/posts";
+import { GetServerSideProps } from 'next';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { baseUrl } from '../../../src/constant/service';
+import HttpClient from '../../../src/network/http';
+import PostService from '../../../src/service/post';
+import { Post } from '../../../types/posts';
 
 type Props = {
-  postId: string;
+    postId: string;
 };
 
 function EditPostPage({ postId }: Props) {
-  const postService = new PostService(baseUrl);
+    const httpClient = new HttpClient(baseUrl);
+    const postService = new PostService(httpClient);
 
-  const [post, setPost] = useState<Post | null>(null);
+    const [post, setPost] = useState<Post | null>(null);
 
-  const fetchPostById = async (postId: string) => {
-    if (!postId) return;
-    const data = await postService.getPostById(postId);
+    const fetchPostById = async (postId: string) => {
+        if (!postId) return;
+        const data = await postService.getPostById(postId);
 
-    setPost(data);
-  };
+        setPost(data);
+    };
 
-  useEffect(() => {
-    void fetchPostById(postId);
-  }, []);
+    useEffect(() => {
+        void fetchPostById(postId);
+    }, []);
 
-  const handleChangeText = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = e.target;
-    if (!post) return;
-    setPost({ ...post, text: value });
-  };
+    const handleChangeText = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        const { value } = e.target;
+        if (!post) return;
+        setPost({ ...post, text: value });
+    };
 
-  const handleSubmit = async () => {
-    if (!post) return;
-    console.log(post);
-    const data = await postService.updatePost(postId, post.text);
+    const handleSubmit = async () => {
+        if (!post) return;
+        console.log(post);
+        const data = await postService.updatePost(postId, post.text);
 
-    setPost(data);
-  };
+        setPost(data);
+    };
 
-  return (
-    <div>
-      <img src={post?.url} />
-      <textarea value={post?.text} onChange={handleChangeText} />
-      <button onClick={handleSubmit}>submit</button>
-    </div>
-  );
+    return (
+        <div>
+            <img src={post?.url} />
+            <textarea value={post?.text} onChange={handleChangeText} />
+            <button onClick={handleSubmit}>submit</button>
+        </div>
+    );
 }
 
 export default EditPostPage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { query } = context;
-  const { id } = query;
+    const { query } = context;
+    const { id } = query;
 
-  return {
-    props: {
-      postId: id,
-    },
-  };
+    return {
+        props: {
+            postId: id,
+        },
+    };
 };
