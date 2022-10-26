@@ -1,8 +1,8 @@
-export interface HttpImpl {
+export interface HttpClientImpl {
     fetch(url: string, options: any): Promise<any>;
 }
 
-export default class HttpClient implements HttpImpl {
+export default class HttpClient implements HttpClientImpl {
     private baseUrl: string;
     constructor(baseUrl: string) {
         this.baseUrl = baseUrl;

@@ -1,9 +1,9 @@
-import { HttpImpl } from './../network/http';
+import { HttpClientImpl } from './../network/http';
 import { Post } from '../../types/posts';
 
 export default class PostService {
-    private http: HttpImpl;
-    constructor(http: HttpImpl) {
+    private http: HttpClientImpl;
+    constructor(http: HttpClientImpl) {
         this.http = http;
     }
 
