@@ -1,4 +1,4 @@
-import express, { ErrorRequestHandler, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
