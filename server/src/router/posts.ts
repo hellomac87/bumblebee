@@ -1,6 +1,6 @@
 import express from 'express';
 import 'express-async-errors';
-import * as postValidator from '../middleware/validator';
+import * as validator from '../middleware/validator';
 import * as postController from '../controller/post';
 
 const router = express.Router();
@@ -11,9 +11,9 @@ router.get('/', postController.getPosts);
 // GET /posts/:id
 router.get('/:id', postController.getPost);
 // POST /posts
-router.post('/', postValidator.createPost, postController.createPost);
+router.post('/', validator.createPost, postController.createPost);
 // PUT /posts/:id
-router.put('/:id', postValidator.updatePost, postController.updatePost);
+router.put('/:id', validator.updatePost, postController.updatePost);
 // DELETE /posts/:id
 router.delete('/:id', postController.deletePost);
 
