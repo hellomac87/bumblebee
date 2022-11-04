@@ -20,3 +20,7 @@ export async function createUser(user: Omit<User, 'id'>): Promise<string> {
 export async function findByUsername(username: string): Promise<User | undefined> {
     return users.find((user) => user.username === username);
 }
+
+export async function findById(id: string): Promise<User | undefined> {
+    return users.find((user) => user.id === id);
+}

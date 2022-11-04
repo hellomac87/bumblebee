@@ -2,9 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as userRepository from '../data/auth';
+import { MyResponseLocals } from '../middleware/auth';
 
 const bcryptSaltRounds = 12;
-const jwtSecretKey = 'dobbysBumblebeeproJect';
+export const jwtSecretKey = 'dobbysBumblebeeproJect';
 const jwtExpiresInDays = '2d';
 
 export async function signup(req: Request, res: Response, next: NextFunction) {
@@ -59,6 +60,15 @@ export async function login(req: Request, res: Response, next: NextFunction) {
         token,
         username,
     });
+}
+
+export async function me(req: Request, res: Response<any, MyResponseLocals>, next: NextFunction) {
+    const { userId, token } = res.locals;
+    const user = await userRepository.findById(userId);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ token, userId, username: user.username });
 }
 
 function createJwtToken(id: string) {
