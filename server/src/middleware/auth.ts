@@ -33,6 +33,8 @@ export async function isAuth(req: Request, res: Response<any, MyResponseLocals>,
             return res.status(401).json(AUTH_ERROR);
         }
         // user exist verify
+        // 유저 확인은 생략해도 된다.
+        // 확인이 필요한 경우 필요한 api 에 한하여 컨트롤러에서 확인한다.
         const user = await userRepository.findById((decoded as MyJwtDecodePayload).id);
         if (!user) {
             return res.status(401).json(AUTH_ERROR);
