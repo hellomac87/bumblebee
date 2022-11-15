@@ -1,3 +1,4 @@
+import { TokenStorageImpl } from './token';
 import { HttpClientImpl } from './../network/http';
 
 interface User {
@@ -10,8 +11,9 @@ interface User {
 }
 
 type SignUpRequest = Omit<User, 'id'>;
-type SignUpResponse = Pick<User, 'username'> & {
+type SignUpResponse = {
     token: string;
+    username: string;
 };
 type LoginRequest = Pick<User, 'username' | 'password'>;
 type LoginResponse = Pick<User, 'username'> & {
@@ -24,27 +26,40 @@ type MeResponse = Pick<User, 'username'> & {
 export default class AuthService {
     private http: HttpClientImpl;
     private servicePath: string = '/auth';
-    constructor(http: HttpClientImpl) {
+    tokenStorage: TokenStorageImpl;
+
+    constructor(http: HttpClientImpl, tokenStorage: TokenStorageImpl) {
         this.http = http;
+        this.tokenStorage = tokenStorage;
     }
 
     async signup(body: SignUpRequest): Promise<SignUpResponse> {
-        return await this.http.fetch(`${this.servicePath}`, {
+        const data = await this.http.fetch<SignUpResponse>(`${this.servicePath}/signup`, {
             method: 'POST',
-            body,
+            body: JSON.stringify(body),
         });
+        this.tokenStorage.saveToken(data.token);
+        return data;
     }
 
     async login(body: LoginRequest): Promise<LoginResponse> {
-        return await this.http.fetch(`${this.servicePath}`, {
+        const data = await this.http.fetch<LoginResponse>(`${this.servicePath}/login`, {
             method: 'POST',
             body,
         });
+        this.tokenStorage.saveToken(data.token);
+        return data;
     }
 
     async me(): Promise<MeResponse> {
-        return await this.http.fetch(`${this.servicePath}`, {
+        const token = this.tokenStorage.getToken();
+        return await this.http.fetch<MeResponse>(`${this.servicePath}/me`, {
             method: 'GET',
+            headers: { Authorization: `Bearer ${token}` },
         });
+    }
+
+    async logout() {
+        this.tokenStorage.clearToken();
     }
 }

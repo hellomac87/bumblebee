@@ -1,5 +1,5 @@
 export interface HttpClientImpl {
-    fetch(url: string, options: any): Promise<any>;
+    fetch<T extends any>(url: string, options: any): Promise<T>;
 }
 
 export default class HttpClient implements HttpClientImpl {
@@ -8,7 +8,7 @@ export default class HttpClient implements HttpClientImpl {
         this.baseUrl = baseUrl;
     }
 
-    async fetch(url: string, options: any): Promise<any> {
+    async fetch<T extends any>(url: string, options: any): Promise<T> {
         const res = fetch(`${this.baseUrl}${url}`, {
             ...options,
             headers: {
