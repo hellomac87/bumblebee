@@ -1,9 +1,7 @@
 import {
     createContext,
     createRef,
-    Dispatch,
     PropsWithChildren,
-    SetStateAction,
     useContext,
     useEffect,
     useImperativeHandle,
@@ -28,6 +26,7 @@ interface AuthContextInterface {
 
 interface AuthProviderProps {
     authService: AuthService;
+    authErrorEventBus: AuthErrorEventBus;
 }
 
 interface AuthState {
@@ -45,9 +44,21 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
     useImperativeHandle(contextRef, () => (user ? user.token : undefined));
 
     useEffect(() => {
-        authService.me().then((data) => {
-            setUser(data);
+        props.authErrorEventBus.listen((err: any) => {
+            console.log(err);
+            setUser(undefined);
         });
+    }, [props.authErrorEventBus]);
+
+    useEffect(() => {
+        if (user) {
+            authService
+                .me()
+                .then((data) => {
+                    setUser(data);
+                })
+                .catch(console.error);
+        }
     }, [authService]);
 
     const signUp = async (body: SignUpBody) => {
@@ -71,6 +82,16 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
         </AuthContext.Provider>
     );
 }
+export class AuthErrorEventBus {
+    private callback: any;
 
+    listen(callback: any) {
+        this.callback = callback;
+    }
+
+    notify(error: any) {
+        this.callback(error);
+    }
+}
 export const fetchToken = () => contextRef.current;
 export const useAuth = () => useContext(AuthContext);

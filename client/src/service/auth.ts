@@ -45,7 +45,7 @@ export default class AuthService {
     async login(body: LoginRequest): Promise<LoginResponse> {
         const data = await this.http.fetch<LoginResponse>(`${this.servicePath}/login`, {
             method: 'POST',
-            body,
+            body: JSON.stringify(body),
         });
         this.tokenStorage.saveToken(data.token);
         return data;

@@ -20,15 +20,13 @@ const AUTH_ERROR = {
 };
 
 export async function isAuth(req: Request, res: Response<any, MyResponseLocals>, next: NextFunction) {
-    const authHeader = req.get('Authorization');
+    const token = req.cookies.token;
 
-    if (!(authHeader && authHeader.startsWith('Bearer '))) {
+    if (!token) {
         return res.status(401).json(AUTH_ERROR);
     }
 
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(token, jwtSecretKey, async (error, decoded) => {
+    jwt.verify(token, jwtSecretKey, async (error: any, decoded: any) => {
         if (error) {
             return res.status(401).json(AUTH_ERROR);
         }
@@ -40,7 +38,7 @@ export async function isAuth(req: Request, res: Response<any, MyResponseLocals>,
             return res.status(401).json(AUTH_ERROR);
         }
         res.locals.userId = user.id;
-        res.locals.token = token;
+
         next();
     });
 }

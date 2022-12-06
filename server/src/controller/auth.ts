@@ -58,19 +58,24 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     // crete token
     const token = createJwtToken(user.id);
 
-    res.status(200).json({
-        token,
-        username,
-    });
+    res.status(200)
+        .cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+        .json({
+            userId: user.id,
+            username,
+        });
 }
 
 export async function me(req: Request, res: Response<any, MyResponseLocals>, next: NextFunction) {
-    const { userId, token } = res.locals;
+    const { userId } = res.locals;
+    const token = req.cookies.token;
     const user = await userRepository.findById(userId);
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).json({ token, userId, username: user.username });
+    res.status(200)
+        .cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+        .json({ userId, username: user.username });
 }
 
 function createJwtToken(id: string) {
