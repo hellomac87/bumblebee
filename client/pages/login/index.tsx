@@ -8,7 +8,8 @@ type LogInInput = {
 
 function LogInPage() {
     const { register, handleSubmit } = useForm<LogInInput>();
-    const { user, logIn } = useAuth();
+    const { user, logIn, logOut } = useAuth();
+
     const onSubmit = handleSubmit(async (data) => {
         try {
             await logIn(data.username, data.password);
@@ -17,7 +18,6 @@ function LogInPage() {
         }
     });
 
-    console.log(user);
     return (
         <div>
             <form onSubmit={onSubmit}>
@@ -29,6 +29,8 @@ function LogInPage() {
                 </div>
                 <button type={'submit'}>LogIn</button>
             </form>
+
+            <button onClick={() => logOut()}>logout</button>
         </div>
     );
 }

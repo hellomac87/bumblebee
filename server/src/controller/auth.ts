@@ -7,6 +7,7 @@ import { MyResponseLocals } from '../middleware/auth';
 const bcryptSaltRounds = 12;
 export const jwtSecretKey = 'dobbysBumblebeeproJect';
 const jwtExpiresInDays = '2d';
+const TOKEN = 'token';
 
 export async function signup(req: Request, res: Response, next: NextFunction) {
     const { username, password, name, email, url } = req.body as Omit<userRepository.User, 'id'>;
@@ -22,7 +23,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
 
     // password 암호화
     const hashed = await bcrypt.hash(password, bcryptSaltRounds);
-    console.log(hashed);
+    // console.log(hashed);
     // create User
     const userId = await userRepository.createUser({
         username,
@@ -59,7 +60,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     const token = createJwtToken(user.id);
 
     res.status(200)
-        .cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+        .cookie(TOKEN, token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
         .json({
             userId: user.id,
             username,
@@ -74,8 +75,16 @@ export async function me(req: Request, res: Response<any, MyResponseLocals>, nex
         return res.status(404).json({ message: 'User not found' });
     }
     res.status(200)
-        .cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+        .cookie(TOKEN, token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
         .json({ userId, username: user.username });
+}
+
+export async function logout(req: Request, res: Response<any, MyResponseLocals>, next: NextFunction) {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(404).json({ message: 'u r not logged in' });
+    }
+    res.status(200).clearCookie(TOKEN).json({ message: `logout success` });
 }
 
 function createJwtToken(id: string) {

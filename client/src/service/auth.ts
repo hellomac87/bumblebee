@@ -26,11 +26,9 @@ type MeResponse = Pick<User, 'username'> & {
 export default class AuthService {
     private http: HttpClientImpl;
     private servicePath: string = '/auth';
-    tokenStorage: TokenStorageImpl;
 
-    constructor(http: HttpClientImpl, tokenStorage: TokenStorageImpl) {
+    constructor(http: HttpClientImpl) {
         this.http = http;
-        this.tokenStorage = tokenStorage;
     }
 
     async signup(body: SignUpRequest): Promise<SignUpResponse> {
@@ -38,7 +36,6 @@ export default class AuthService {
             method: 'POST',
             body: JSON.stringify(body),
         });
-        this.tokenStorage.saveToken(data.token);
         return data;
     }
 
@@ -47,19 +44,16 @@ export default class AuthService {
             method: 'POST',
             body: JSON.stringify(body),
         });
-        this.tokenStorage.saveToken(data.token);
         return data;
     }
 
     async me(): Promise<MeResponse> {
-        const token = this.tokenStorage.getToken();
         return await this.http.fetch<MeResponse>(`${this.servicePath}/me`, {
             method: 'GET',
-            headers: { Authorization: `Bearer ${token}` },
         });
     }
 
     async logout() {
-        this.tokenStorage.clearToken();
+        console.log(document.cookie);
     }
 }

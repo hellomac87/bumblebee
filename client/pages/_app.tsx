@@ -10,7 +10,7 @@ import PostService from '../src/service/post';
 const tokenStorage = new TokenStorage();
 const authErrorEventBus = new AuthErrorEventBus();
 const httpService = new HttpClient(baseUrl, authErrorEventBus);
-const authService = new AuthService(httpService, tokenStorage);
+const authService = new AuthService(httpService);
 const postService = new PostService(httpService, tokenStorage);
 
 function MyApp({ Component, pageProps }: AppProps) {

@@ -1,12 +1,4 @@
-import {
-    createContext,
-    createRef,
-    PropsWithChildren,
-    useContext,
-    useEffect,
-    useImperativeHandle,
-    useState,
-} from 'react';
+import { createContext, createRef, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import AuthService from '../service/auth';
 
 interface SignUpBody {
@@ -18,7 +10,7 @@ interface SignUpBody {
 }
 
 interface AuthContextInterface {
-    user: AuthState | undefined;
+    user: AuthState | null;
     signUp(body: SignUpBody): Promise<void>;
     logIn(username: string, password: string): Promise<void>;
     logOut(): Promise<void>;
@@ -31,22 +23,19 @@ interface AuthProviderProps {
 
 interface AuthState {
     username: string;
-    token: string;
 }
 
 const AuthContext = createContext({} as AuthContextInterface);
 const contextRef = createRef();
 
 export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
-    const [user, setUser] = useState<AuthState | undefined>(undefined);
+    const [user, setUser] = useState<AuthState | null>(null);
     const { authService } = props;
-
-    useImperativeHandle(contextRef, () => (user ? user.token : undefined));
 
     useEffect(() => {
         props.authErrorEventBus.listen((err: any) => {
             console.log(err);
-            setUser(undefined);
+            setUser(null);
         });
     }, [props.authErrorEventBus]);
 
@@ -73,7 +62,7 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
 
     const logOut = async () => {
         await authService.logout();
-        setUser(undefined);
+        setUser(null);
     };
 
     return (
