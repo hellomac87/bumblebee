@@ -3,6 +3,7 @@ import { Post } from '../../types/posts';
 
 export default class PostService {
     private http: HttpClientImpl;
+
     constructor(http: HttpClientImpl) {
         this.http = http;
     }
@@ -14,9 +15,10 @@ export default class PostService {
         });
     }
 
-    async postPost(text: string): Promise<Post> {
+    async createPost(text: string): Promise<Post> {
         return await this.http.fetch(`/posts`, {
             method: 'POST',
+            headers: this.getHeaders(),
             body: JSON.stringify({ text, username: 'dobby', name: 'Dobby' }),
         });
     }
@@ -24,6 +26,7 @@ export default class PostService {
     async updatePost(postId: string, text: string): Promise<Post> {
         return await this.http.fetch(`/posts/${postId}`, {
             method: 'PUT',
+            headers: this.getHeaders(),
             body: JSON.stringify({ text }),
         });
     }
@@ -31,6 +34,7 @@ export default class PostService {
     async deletePost(postId: string) {
         return await this.http.fetch(`/posts/${postId}`, {
             method: 'DELETE',
+            headers: this.getHeaders(),
         });
     }
 
@@ -38,5 +42,9 @@ export default class PostService {
         return await this.http.fetch(`/posts/${postId}`, {
             method: 'GET',
         });
+    }
+
+    getHeaders(): {} {
+        return {};
     }
 }

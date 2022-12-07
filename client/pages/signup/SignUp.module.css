@@ -1,0 +1,19 @@
+.container {
+    @apply flex flex-col m-auto w-[500px] pt-20;
+}
+
+.title {
+    @apply text-white mb-16 text-4xl uppercase text-center;
+}
+
+.inputWrap {
+    @apply w-full mb-2;
+
+    input {
+        @apply w-full h-12 px-2 bg-gray-700 text-gray-300;
+    }
+}
+
+.submit {
+    @apply w-full h-14 bg-gray-600 text-gray-300 mt-4;
+}

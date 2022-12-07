@@ -2,6 +2,7 @@ import express from 'express';
 import cors, { CorsOptions } from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import 'express-async-errors';
 
 import postsRouter from './router/posts';
@@ -15,9 +16,11 @@ const port = 8080;
 const corsOptions: CorsOptions = {
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200,
+    credentials: true,
 };
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(morgan('tiny'));

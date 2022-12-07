@@ -1,4 +1,4 @@
-import { HttpClientImpl } from './../network/http';
+import HttpClient from './../network/http';
 
 interface User {
     id: string; // 사용자의 고유한 아이디
@@ -10,8 +10,9 @@ interface User {
 }
 
 type SignUpRequest = Omit<User, 'id'>;
-type SignUpResponse = Pick<User, 'username'> & {
+type SignUpResponse = {
     token: string;
+    username: string;
 };
 type LoginRequest = Pick<User, 'username' | 'password'>;
 type LoginResponse = Pick<User, 'username'> & {
@@ -22,28 +23,37 @@ type MeResponse = Pick<User, 'username'> & {
 };
 
 export default class AuthService {
-    private http: HttpClientImpl;
+    private http: HttpClient;
     private servicePath: string = '/auth';
-    constructor(http: HttpClientImpl) {
+
+    constructor(http: HttpClient) {
         this.http = http;
     }
 
     async signup(body: SignUpRequest): Promise<SignUpResponse> {
-        return await this.http.fetch(`${this.servicePath}`, {
+        const data = await this.http.fetch<SignUpResponse>(`${this.servicePath}/signup`, {
             method: 'POST',
-            body,
+            body: JSON.stringify(body),
         });
+        return data;
     }
 
     async login(body: LoginRequest): Promise<LoginResponse> {
-        return await this.http.fetch(`${this.servicePath}`, {
+        const data = await this.http.fetch<LoginResponse>(`${this.servicePath}/login`, {
             method: 'POST',
-            body,
+            body: JSON.stringify(body),
         });
+        return data;
     }
 
     async me(): Promise<MeResponse> {
-        return await this.http.fetch(`${this.servicePath}`, {
+        return await this.http.fetch<MeResponse>(`${this.servicePath}/me`, {
+            method: 'GET',
+        });
+    }
+
+    async logout() {
+        return await this.http.fetch(`${this.servicePath}/logout`, {
             method: 'GET',
         });
     }
