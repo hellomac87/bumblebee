@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { createContext, createRef, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import AuthService from '../service/auth';
 
@@ -30,6 +31,7 @@ const contextRef = createRef();
 
 export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
     const [user, setUser] = useState<AuthState | null>(null);
+    const { replace } = useRouter();
     const { authService } = props;
 
     useEffect(() => {
@@ -40,15 +42,22 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
     }, [props.authErrorEventBus]);
 
     useEffect(() => {
-        if (user) {
-            authService
-                .me()
-                .then((data) => {
-                    setUser(data);
-                })
-                .catch(console.error);
+        if (!user) {
+            fetchMe();
         }
-    }, [authService]);
+    }, []);
+
+    const fetchMe = async () => {
+        try {
+            const data = await authService.me();
+            if (data) setUser(data);
+            else setUser(null);
+        } catch (error) {
+            console.error(error);
+            setUser(null);
+            replace('/login');
+        }
+    };
 
     const signUp = async (body: SignUpBody) => {
         const data = await authService.signup(body);

@@ -1,18 +1,20 @@
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { ChangeEvent, useState } from 'react';
-import { baseUrl } from '../../../src/constant/service';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useAuth } from '../../../src/context/authContext';
+
+import usePost from '../../../src/hook/usePost';
 import HttpClient from '../../../src/network/http';
-import PostService from '../../../src/service/post';
 
 type Props = {
-    postId: string;
+    httpService: HttpClient;
 };
 
-function NewPostPage({}: Props) {
-    const httpClient = new HttpClient(baseUrl);
-    const postService = new PostService(httpClient);
-
+function NewPostPage({ httpService }: Props) {
     const router = useRouter();
+    const { addPost } = usePost(httpService);
+    const { user } = useAuth();
+
     const [text, setText] = useState<string>('');
 
     const handleChangeText = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -24,10 +26,12 @@ function NewPostPage({}: Props) {
     const handleSubmit = async () => {
         if (!text) return;
 
-        await postService.postPost(text);
+        await addPost(text);
 
         router.replace('/posts');
     };
+
+    if (!user) return null;
 
     return (
         <div>

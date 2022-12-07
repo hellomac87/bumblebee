@@ -1,5 +1,4 @@
-import { TokenStorageImpl } from './token';
-import { HttpClientImpl } from './../network/http';
+import HttpClient from './../network/http';
 
 interface User {
     id: string; // 사용자의 고유한 아이디
@@ -24,10 +23,10 @@ type MeResponse = Pick<User, 'username'> & {
 };
 
 export default class AuthService {
-    private http: HttpClientImpl;
+    private http: HttpClient;
     private servicePath: string = '/auth';
 
-    constructor(http: HttpClientImpl) {
+    constructor(http: HttpClient) {
         this.http = http;
     }
 
@@ -54,6 +53,8 @@ export default class AuthService {
     }
 
     async logout() {
-        console.log(document.cookie);
+        return await this.http.fetch(`${this.servicePath}/logout`, {
+            method: 'GET',
+        });
     }
 }

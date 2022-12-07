@@ -1,13 +1,11 @@
-import { TokenStorageImpl } from './token';
 import { HttpClientImpl } from './../network/http';
 import { Post } from '../../types/posts';
 
 export default class PostService {
     private http: HttpClientImpl;
-    private tokenStorage: TokenStorageImpl;
-    constructor(http: HttpClientImpl, tokenStorage: TokenStorageImpl) {
+
+    constructor(http: HttpClientImpl) {
         this.http = http;
-        this.tokenStorage = tokenStorage;
     }
 
     async getPosts(username?: string): Promise<Post[]> {
@@ -17,7 +15,7 @@ export default class PostService {
         });
     }
 
-    async postPost(text: string): Promise<Post> {
+    async createPost(text: string): Promise<Post> {
         return await this.http.fetch(`/posts`, {
             method: 'POST',
             headers: this.getHeaders(),
@@ -47,9 +45,6 @@ export default class PostService {
     }
 
     getHeaders(): {} {
-        const token = this.tokenStorage.getToken();
-        return {
-            Authorization: `Bearer ${token}`,
-        };
+        return {};
     }
 }
