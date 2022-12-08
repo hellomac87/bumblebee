@@ -19,18 +19,23 @@ function LogInPage() {
     });
 
     return (
-        <div>
-            <form onSubmit={onSubmit}>
-                <div>
+        <div className='w-full h-screen flex flex-col items-center justify-center px-6'>
+            <h1 className='text-2xl mb-10'>{'Login'}</h1>
+            <form onSubmit={onSubmit} className='w-full flex flex-col items-center'>
+                <div className='w-full mb-2'>
                     <input type={'text'} {...register('username')} placeholder={'username'} />
                 </div>
-                <div>
+                <div className='w-full'>
                     <input type={'password'} {...register('password')} placeholder={'password'} />
                 </div>
-                <button type={'submit'}>LogIn</button>
+                <div className='w-full mt-4'>
+                    <button type={'submit'}>LogIn</button>
+                </div>
             </form>
 
-            <button onClick={() => logOut()}>logout</button>
+            {/* <button onClick={() => logOut()} type='button'>
+                logout
+            </button> */}
         </div>
     );
 }
