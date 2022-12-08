@@ -3,5 +3,19 @@
 @tailwind utilities;
 
 body {
-  @apply bg-[#0D1117] text-[#8B949E];
+    @apply bg-[#0D1117] text-[#8B949E];
+}
+
+input {
+    @apply w-full h-14  block px-4 text-lg bg-slate-400 text-slate-700 border-0 rounded-md;
+    @apply placeholder:text-slate-500;
+    @apply focus:outline-none;
+}
+
+button,
+[type='submit'],
+[type='button'],
+[type='reset'] {
+    @apply w-full h-14 bg-slate-800 text-slate-500 rounded-md;
+    @apply hover:text-slate-400 hover:bg-slate-700 hover:transition-colors;
 }
