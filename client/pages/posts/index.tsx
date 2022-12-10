@@ -3,21 +3,23 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../src/components/common/Header';
 import PostItem from '../../src/components/posts/PostItem';
 import PostList from '../../src/components/posts/PostList';
-import { baseUrl } from '../../src/constant/service';
+import { useAuth } from '../../src/context/authContext';
+import usePost from '../../src/hook/usePost';
 import HttpClient from '../../src/network/http';
-import PostService from '../../src/service/post';
 import { Post } from '../../types/posts';
 
-type Props = {};
+type Props = {
+    httpService: HttpClient;
+};
 
-function PostsPage({}: Props) {
+function PostsPage({ httpService }: Props) {
     const router = useRouter();
     const [posts, setPosts] = useState<null | Post[]>(null);
-    const httpClient = new HttpClient(baseUrl);
-    const postService = new PostService(httpClient);
+    const { user } = useAuth();
+    const { getPosts, removePost } = usePost(httpService);
 
     const fetchPosts = async () => {
-        const data = await postService.getPosts();
+        const data = await getPosts();
         setPosts(data);
     };
 
@@ -28,7 +30,7 @@ function PostsPage({}: Props) {
     const handleClickDelete = (postId: string) => async () => {
         const isDelete = window.confirm('deletePost?');
         if (isDelete) {
-            await postService.deletePost(postId);
+            await removePost(postId);
             alert('delete post!');
             await fetchPosts();
         }
@@ -37,6 +39,8 @@ function PostsPage({}: Props) {
     useEffect(() => {
         void fetchPosts();
     }, []);
+
+    if (!user) null;
 
     return (
         <div>

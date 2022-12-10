@@ -9,7 +9,15 @@ export function usePost(httpService: HttpClient) {
         // error handling
     };
 
-    return { addPost };
+    const removePost = async (postId: string) => {
+        await postService.deletePost(postId);
+    };
+
+    const getPosts = async () => {
+        return await postService.getPosts();
+    };
+
+    return { addPost, getPosts, removePost };
 }
 
 export default usePost;
