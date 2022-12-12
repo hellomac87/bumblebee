@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../src/context/authContext';
 
@@ -7,12 +8,14 @@ type LogInInput = {
 };
 
 function LogInPage() {
+    const { replace } = useRouter();
     const { register, handleSubmit } = useForm<LogInInput>();
-    const { user, logIn, logOut } = useAuth();
+    const { logIn } = useAuth();
 
     const onSubmit = handleSubmit(async (data) => {
         try {
             await logIn(data.username, data.password);
+            replace('/posts');
         } catch (e) {
             console.log(e);
         }
