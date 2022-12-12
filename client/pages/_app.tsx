@@ -1,11 +1,10 @@
 import '../styles/globals.css';
-import type { AppContext, AppProps } from 'next/app';
+import type { AppProps } from 'next/app';
 import HttpClient from '../src/network/http';
 import { baseUrl } from '../src/constant/service';
 import AuthService from '../src/service/auth';
-import { AuthErrorEventBus, AuthProvider } from '../src/context/authContext';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import PostService from '../src/service/post';
+import { AuthErrorEventBus, AuthProvider } from '../src/context/authContext';
 import { PostProvider } from '../src/context/PostContext';
 
 const authErrorEventBus = new AuthErrorEventBus();

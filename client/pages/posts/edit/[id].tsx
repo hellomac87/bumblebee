@@ -1,9 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { baseUrl } from '../../../src/constant/service';
-import HttpClient from '../../../src/network/http';
-import PostService from '../../../src/service/post';
+import { usePost } from '../../../src/context/PostContext';
 import { Post } from '../../../types/posts';
 
 type Props = {
@@ -11,15 +9,13 @@ type Props = {
 };
 
 function EditPostPage({ postId }: Props) {
-    const httpClient = new HttpClient(baseUrl);
-    const postService = new PostService(httpClient);
-
+    const { getPostById, updatePost } = usePost();
     const router = useRouter();
     const [post, setPost] = useState<Post | null>(null);
 
     const fetchPostById = async (postId: string) => {
         if (!postId) return;
-        const data = await postService.getPostById(postId);
+        const data = await getPostById(postId);
 
         setPost(data);
     };
@@ -37,7 +33,7 @@ function EditPostPage({ postId }: Props) {
     const handleSubmit = async () => {
         if (!post) return;
 
-        const data = await postService.updatePost(postId, post.text);
+        const data = await updatePost(postId, post.text);
 
         setPost(data);
         router.replace('/posts');

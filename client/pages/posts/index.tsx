@@ -1,22 +1,20 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+
+import { useAuth } from '../../src/context/authContext';
+import { usePost } from '../../src/context/PostContext';
+import { Post } from '../../types/posts';
 import Header from '../../src/components/common/Header';
 import PostItem from '../../src/components/posts/PostItem';
 import PostList from '../../src/components/posts/PostList';
-import { useAuth } from '../../src/context/authContext';
-import usePost from '../../src/hook/usePost';
-import HttpClient from '../../src/network/http';
-import { Post } from '../../types/posts';
 
-type Props = {
-    httpService: HttpClient;
-};
+type Props = {};
 
-function PostsPage({ httpService }: Props) {
+function PostsPage({}: Props) {
     const router = useRouter();
     const [posts, setPosts] = useState<null | Post[]>(null);
     const { user } = useAuth();
-    const { getPosts, removePost } = usePost(httpService);
+    const { getPosts, removePost } = usePost();
 
     const fetchPosts = async () => {
         const data = await getPosts();

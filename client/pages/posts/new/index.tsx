@@ -1,18 +1,13 @@
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useAuth } from '../../../src/context/authContext';
+import { usePost } from '../../../src/context/PostContext';
 
-import usePost from '../../../src/hook/usePost';
-import HttpClient from '../../../src/network/http';
+type Props = {};
 
-type Props = {
-    httpService: HttpClient;
-};
-
-function NewPostPage({ httpService }: Props) {
+function NewPostPage({}: Props) {
     const router = useRouter();
-    const { addPost } = usePost(httpService);
+    const { addPost } = usePost();
     const { user } = useAuth();
 
     const [text, setText] = useState<string>('');
@@ -25,9 +20,7 @@ function NewPostPage({ httpService }: Props) {
 
     const handleSubmit = async () => {
         if (!text) return;
-
         await addPost(text);
-
         router.replace('/posts');
     };
 
