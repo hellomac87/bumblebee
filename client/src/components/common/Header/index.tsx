@@ -1,16 +1,22 @@
-import React from "react";
+import { useRouter } from 'next/router';
+import { FaPlus, FaRegLaughBeam } from 'react-icons/fa';
 
-import styles from "./Header.module.css";
+import styles from './Header.module.css';
 
 type Props = {};
 
 function Header({}: Props) {
-  return (
-    <header className={styles.container}>
-      <div>post.com</div>
-      <div>menu?</div>
-    </header>
-  );
+    const { push } = useRouter();
+    const handleClickLogo = () => {};
+    const handleClickNewButton = () => {
+        push('/posts/new');
+    };
+    return (
+        <header className={styles.container}>
+            <FaRegLaughBeam size={24} onClick={handleClickLogo} />
+            <FaPlus onClick={handleClickNewButton} className='cursor-pointer' size={24} />
+        </header>
+    );
 }
 
 export default Header;
