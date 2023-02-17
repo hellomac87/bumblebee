@@ -4,7 +4,7 @@
 }
 
 .userBlock {
-    @apply w-full flex items-center px-[24px] pt-[24px] pb-[12px];
+    @apply w-full flex items-center px-6 pt-6 pb-3;
     @apply sticky top-0 z-10 h-auto;
 }
 
@@ -31,4 +31,21 @@
 
 .userName {
     @apply w-full font-semibold;
+}
+
+.menuList {
+    @apply w-full p-3;
+}
+
+.menuItem {
+    @apply flex items-center;
+
+    a {
+        @apply flex p-3 text-sm w-full rounded-md;
+        @apply hover:bg-[#1c1c41];
+
+        svg {
+            @apply mr-2 text-xl;
+        }
+    }
 }

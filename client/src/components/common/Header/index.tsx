@@ -1,19 +1,13 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FaPlus } from 'react-icons/fa';
+import { MdOutlineCreate } from 'react-icons/md';
 import { useAuth } from 'src/context/authContext';
 
 import styles from './Header.module.css';
 
-type Props = {};
-
-function Header({}: Props) {
+function Header() {
     const { push } = useRouter();
     const { user } = useAuth();
-    const handleClickLogo = () => {};
-
-    const routeToCreatePost = () => {
-        push('/posts/new');
-    };
 
     return (
         <header className={styles.container}>
@@ -23,13 +17,23 @@ function Header({}: Props) {
                 </div>
                 <div className={styles.signBlockWrap}>
                     <div className={styles.signBlock}>
-                        <div className={styles.signedInAs}>Signed in as</div>
-                        <div className={styles.signOut}>Sign out</div>
+                        <div className={styles.signedInAs}>{'Signed in as'}</div>
+                        <div className={styles.signOut}>{'Sign out'}</div>
                     </div>
 
                     <div className={styles.userName}>{user?.username}</div>
                 </div>
             </div>
+
+            <ul className={styles.menuList}>
+                <li className={styles.menuItem}>
+                    <Link href={'/posts/new'}>
+                        <a>
+                            <MdOutlineCreate /> {'New Post'}
+                        </a>
+                    </Link>
+                </li>
+            </ul>
         </header>
     );
 }
