@@ -41,7 +41,7 @@ function PostsPage({}: Props) {
     if (!user) null;
 
     return (
-        <div>
+        <div style={{ display: 'flex', height: '100vh' }}>
             <Header />
             <PostList>
                 {posts?.map((post) => (

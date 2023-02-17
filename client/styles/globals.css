@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply bg-[#0D1117] text-[#8B949E];
+    @apply bg-[#171727] text-[#8B949E];
 }
 
 input {
