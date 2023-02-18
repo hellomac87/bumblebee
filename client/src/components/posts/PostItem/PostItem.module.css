@@ -1,15 +1,20 @@
 .container {
-  @apply snap-start h-screen flex flex-col items-center justify-center;
+    @apply flex flex-row items-center justify-center  p-4 mb-2 rounded-lg;
+    @apply bg-[#101319];
+}
+
+.text {
+    @apply flex-auto;
 }
 
 .actions {
-  @apply w-full flex items-center space-x-4 px-4;
+    @apply w-[200px] flex items-center space-x-2 px-4;
 }
 
 .edit {
-  @apply w-full h-10 bg-gray-600 text-white cursor-pointer rounded-md;
+    @apply w-24 h-8   cursor-pointer rounded-md;
 }
 
 .delete {
-  @apply w-full h-10 bg-red-600 text-white cursor-pointer rounded-md;
+    @apply w-24 h-8  cursor-pointer rounded-md;
 }

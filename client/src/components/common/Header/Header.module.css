@@ -41,7 +41,7 @@
     @apply flex items-center;
 
     a {
-        @apply flex p-3 text-sm w-full rounded-md;
+        @apply flex p-3 text-sm w-full rounded-lg;
         @apply hover:bg-[#1c1c41];
 
         svg {
