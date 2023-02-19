@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as userRepository from '../data/auth';
 import { MyResponseLocals } from '../middleware/auth';
+import { User } from '../model/user';
 
 const bcryptSaltRounds = 12;
 export const jwtSecretKey = 'dobbysBumblebeeproJect';
@@ -10,9 +11,7 @@ const jwtExpiresInDays = '2d';
 const TOKEN = 'token';
 
 export async function signup(req: Request, res: Response, next: NextFunction) {
-    const { username, password, name, email, url } = req.body as Omit<userRepository.User, 'id'>;
-
-    console.log({ username, password, name, email, url });
+    const { username, password, name, email, avatarUrl } = req.body as Omit<User, 'id'>;
 
     const found = await userRepository.findByUsername(username);
 
@@ -30,7 +29,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
         password: hashed,
         name,
         email,
-        url,
+        avatarUrl,
     });
 
     // crete token
@@ -43,7 +42,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function login(req: Request, res: Response, next: NextFunction) {
-    const { username, password } = req.body as Pick<userRepository.User, 'username' | 'password'>;
+    const { username, password } = req.body as Pick<User, 'username' | 'password'>;
     const user = await userRepository.findByUsername(username);
 
     // validation user

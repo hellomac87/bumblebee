@@ -1,7 +1,9 @@
+import dotEnv from 'dotenv';
 import express from 'express';
 import cors, { CorsOptions } from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
+import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import 'express-async-errors';
 
@@ -9,6 +11,9 @@ import postsRouter from './router/posts';
 import authRouter from './router/auth';
 
 const app = express();
+
+dotEnv.config();
+const { MONGO_URI } = process.env;
 
 const port = 8080;
 
@@ -36,6 +41,12 @@ app.use((error: any, req: any, res: { sendStatus: (arg0: number) => void }, next
     console.log(error);
     res.sendStatus(500);
 });
+
+mongoose.set('strictQuery', true);
+mongoose
+    .connect(MONGO_URI!)
+    .then(() => console.log('success connected mongodb!'))
+    .catch((e) => console.error(e));
 
 app.listen(port, () => {
     console.log(`express start on ${port}`);
