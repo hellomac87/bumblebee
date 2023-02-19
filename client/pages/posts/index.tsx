@@ -7,6 +7,7 @@ import { Post } from '../../types/posts';
 import Header from '../../src/components/common/Header';
 import PostItem from '../../src/components/posts/PostItem';
 import PostList from '../../src/components/posts/PostList';
+import PageLayout from 'src/components/layout/PageLayout';
 
 type Props = {};
 
@@ -41,7 +42,7 @@ function PostsPage({}: Props) {
     if (!user) null;
 
     return (
-        <div style={{ display: 'flex', height: '100vh' }}>
+        <PageLayout>
             <Header />
             <PostList>
                 {posts?.map((post) => (
@@ -53,7 +54,7 @@ function PostsPage({}: Props) {
                     />
                 ))}
             </PostList>
-        </div>
+        </PageLayout>
     );
 }
 
