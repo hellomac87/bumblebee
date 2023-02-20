@@ -7,7 +7,7 @@ body {
 }
 
 input {
-    @apply w-full h-14  block px-4 text-lg bg-slate-400 text-slate-700 border-0 rounded-md;
+    @apply w-full h-8 block px-2 text-xs bg-slate-400 text-slate-700 border-0;
     @apply placeholder:text-slate-500;
     @apply focus:outline-none;
 }
@@ -16,6 +16,6 @@ button,
 [type='submit'],
 [type='button'],
 [type='reset'] {
-    @apply w-full h-14 bg-slate-800 text-slate-500 rounded-md;
+    @apply w-full h-8 text-sm bg-slate-800 text-slate-500 rounded-md;
     @apply hover:text-slate-400 hover:bg-slate-700 hover:transition-colors;
 }
