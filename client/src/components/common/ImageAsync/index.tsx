@@ -1,15 +1,14 @@
-import { FC } from 'react';
 import useImageLoaded from 'src/hooks/useImageLoaded';
 
-interface ImageAsyncProps {
+interface ImageAsyncProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     src: string;
     renderFallback?: React.ReactNode;
 }
 
-function ImageAsync({ src, renderFallback }: ImageAsyncProps) {
+function ImageAsync({ src, renderFallback, ...props }: ImageAsyncProps) {
     const { loaded, error } = useImageLoaded({ src });
 
-    if (loaded && !error) return <img src={src} />;
+    if (loaded && !error) return <img {...props} src={src} />;
     else return <>{renderFallback ?? null}</>;
 }
 

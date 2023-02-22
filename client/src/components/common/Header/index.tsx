@@ -7,17 +7,15 @@ import ImageAsync from '../ImageAsync';
 import styles from './Header.module.css';
 
 function Header() {
-    const { push } = useRouter();
     const { user } = useAuth();
 
     return (
         <header className={styles.container}>
             <div className={styles.userBlock}>
                 <div className={styles.avatar}>
-                    {/* <ImageAsync src={'https://www.gravatar.com/avatar/b67dbffa04ea073ccb4c6884dbaa9dae?d=retro'} /> */}
                     <ImageAsync
                         src={'https://www.gravatar.com/avatar/b67dbffa04ea073ccb4c6884dbaa9dae?d=retro'}
-                        renderFallback={<div>fallback</div>}
+                        renderFallback={<div />}
                     />
                 </div>
                 <div className={styles.signBlockWrap}>
