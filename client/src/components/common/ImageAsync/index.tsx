@@ -1,14 +1,16 @@
+import { FC } from 'react';
 import useImageLoaded from 'src/hooks/useImageLoaded';
 
 interface ImageAsyncProps {
     src: string;
-    fallback?: React.ReactNode;
+    renderFallback?: React.ReactNode;
 }
 
-function ImageAsync({ src, fallback }: ImageAsyncProps) {
-    const { loaded } = useImageLoaded({ src });
+function ImageAsync({ src, renderFallback }: ImageAsyncProps) {
+    const { loaded, error } = useImageLoaded({ src });
 
-    return loaded ? <img src={src} /> : fallback ?? null;
+    if (loaded && !error) return <img src={src} />;
+    else return <>{renderFallback ?? null}</>;
 }
 
 export default ImageAsync;
